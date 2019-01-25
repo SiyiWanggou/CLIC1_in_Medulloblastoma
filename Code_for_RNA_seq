@@ -55,5 +55,22 @@ done
 --------------------------------------------
 #Use Stringtie to merge predicted transcripts from all libraries into a unified transcriptome.
 stringtie --merge -p 38 -G ~/Refence_GTF/GTF_GRCh38/Homo_sapiens.GRCh38.90.gtf -o ./merged_gtf/merged.gtf mergelist.txt
-#Use Stringtie to 
+#Use Stringtie to quantify the RNA sequencing data and generate output file for ballgown.
+---------Stringtie_for_ballgown.sh----------
+cd ~/CLIC1
+for i in *.bam;
+do
+a=${i%.bam*};
+echo -------------;
+echo "{a%} stringtie_for_ballgown initiation";
+date
+stringtie -e -B -p 38 -G ./merged_gtf/merged.gtf -o ./${i}/${i}.gtf ${i}.bam;
+echo "{a%} stringtie_for_ballgown initiation done!";
+done
+--------------------------------------------
+
+
+
+
+
 
