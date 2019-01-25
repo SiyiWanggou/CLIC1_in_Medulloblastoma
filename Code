@@ -1,23 +1,3 @@
-#Identify CLIC1 expression in TCGA PANCAN dataset.
-getwd()
-a<-read.delim("TCGA-PANCCAN-RNA-seq.txt",header=FALSE)
-a1<-t(a)
-which(colnames(a1)=="CLIC1")
-b<-a1[,31611]
-c<-a1[,1]
-d<-cbind(c,b)
-write.table(d,"CLIC1mRNA.txt",col.names=FALSE,row.names=FALSE,quote=FALSE,sep="\t")
-e<-read.delim("TCGA-PANCAN-metadata.txt",header=TRUE)
-f<-merge(e,d,by="sampleID")
-write.table(f,"CLIC1forexpression.txt",col.names=FALSE,row.names=FALSE,quote=FALSE,sep="\t")
-mydata<-list()
-for(i in 1:33){mydata[[i]]<-subset(f,primary_disease.1==i)}
-result<-list()
-for(i in 1:33){result[[i]]<-t.test(CLIC1~sample.type,mydata[[i]])} 
-sink("result.txt")
-print(result)
-sink()
-
 #Violin plot of CLIC1 expression in TCGA PANCAN dataset.
 conda install seaborn
 conda install scipy
