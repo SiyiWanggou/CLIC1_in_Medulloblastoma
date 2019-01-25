@@ -10,14 +10,14 @@ wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/data/grch38_tran.tar.gz
 #Download GRCh38 GTF file.
 wget ftp://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.gtf.gz
 #Data trimming of raw data.
---------RNAseq-trimming-option-1.sh--------
+--------RNAseq-trimming-option-1.sh---------
 cd ~/CLIC1
 for a in *_R1.fastq.gz;
 do
 a=${a%_R1.fastq.gz*};
 bbduk.sh in=${a}_R1.fastq.gz in2=${a}_R2.fastq.gz out=${a}_R1.Clean.fq.gz out2=${a}_R2.Clean.fq.gz ref=~/BBMAPref/resources/adapters.fa;
 done
----------------------------------
+--------------------------------------------
 #Data trimming of raw data for adapter.
 ---------RNAseq-trimming-option-2.sh--------
 cd ~/CLIC1
@@ -26,7 +26,7 @@ do
 a=${a%_R1.Clean.fq.gz*};
 trim_galore ${a}_R1.Clean.fq.gz ${a}_R2.Clean.fq.gz --length 20 --stringency 5 --paired --fastqc;
 done
------------------------------------------
+--------------------------------------------
 #Using HISAT2 to align the RNA sequecing reads.
 ----------------HISAT2.sh-------------------
 cd ~/CLIC1
@@ -40,7 +40,7 @@ samtools sort -@ 38 -o ${a}.bam ${a}.sam;
 rm ${a}.sam;
 echo "${a} Hisat2 done!";
 done
------------------------------------------
+--------------------------------------------
 #Use Stringtie to assembly RNA-Seq alignments into potential transcripts.
 ----------------Stringtie.sh----------------
 cd ~/CLIC1
@@ -58,19 +58,82 @@ stringtie --merge -p 38 -G ~/Refence_GTF/GTF_GRCh38/Homo_sapiens.GRCh38.90.gtf -
 #Use Stringtie to quantify the RNA sequencing data and generate output file for ballgown.
 ---------Stringtie_for_ballgown.sh----------
 cd ~/CLIC1
-for i in *.bam;
+for a in *.bam;
 do
-a=${i%.bam*};
+a=${a%.bam*};
 echo -------------;
 echo "{a%} stringtie_for_ballgown initiation";
 date
-stringtie -e -B -p 38 -G ./merged_gtf/merged.gtf -o ./${i}/${i}.gtf ${i}.bam;
-echo "{a%} stringtie_for_ballgown initiation done!";
+stringtie -e -B -p 38 -G ./merged_gtf/merged.gtf -o ./${a}/${a}.gtf ${a}.bam;
+echo "{a%} stringtie_for_ballgown done!";
 done
 --------------------------------------------
 
+#We will get 15 folders containing qualified RNA-seq data of each library.
+#Then we move to R and identify the differential expressed genes between each two groups.
+#We take the comparison between shCLIC1 and shScr for example.
+setwd("~/CLIC1/Ballgown")
+library(RSkittleBrewer)
+library(genefilter)
+library(devtools)
+library(dplyr)
+library(ballgown)
+pheno_data<-read.csv("shCLC1_vs_shScr_phenotype.txt")
+bg<-ballgown(dataDir="shCLIC1_vs_shScr",samplePattern="CHE8695_",pData=pheno_data)
+bg_filt<-subset(bg,"rowVars(texpr(bg))>1",genomesubset=TRUE)
+results_genes_bg_filt<-stattest(bg_filt,feature="gene",covariate="phenotype",getFC=TRUE,meas="FPKM")
+gene_names_bg_filt=data.frame(geneNames=ballgown::geneNames(bg_filt),id=ballgown::geneIDs(bg_filt))
+results_genes_bg_filt<-merge(gene_names_bg_filt,results_genes_bg_filt,by="id",all=FALSE)
+results_genes_bg_filt_unique<-results_genes_bg_filt[!duplicated(results_genes_bg_filt[c("geneNames")]),]
+write.table(results_genes_bg_filt_unique,"statistics_shCLIC1_vs_shScr.txt",col.names = TRUE,row.names = FALSE,quote=FALSE,sep='\t')
 
+#Gernerate the valcano plot, as shown in Figure 7a.
+library(ggplot2)
+library(ggthemes)
+library(Cairo)
+data<-read.delim("statistics_shCLIC1_vs_shScr.txt",header=T,sep='\t',na.strings = "")
+data$threshold=as.factor(ifelse(data$pval<0.05 & abs(log2(data1$fc)) >= 1.0,ifelse(log2(data1$fc) > 1.0,'Up regulated','Down regulated'),'None'))
+Cairo(file="volcano_shCLIC1_vs_shScr.png",type="png",units="in",bg="white",width=8,height=8,pointsize=16,dpi=300)
+ggplot(data=data1, aes(x=log2(fc), y =-log10(pval), colour=threshold,fill=threshold)) +
+  scale_color_manual(values=c("green3", "black","red"))+
+  geom_point(alpha=0.4, size=1.6) +
+  xlim(c(-4, 4)) +
+  theme_bw(base_size = 16, base_family = "Times") +
+  geom_vline(xintercept=c(-1.0,1.0),lty=4,col="grey",lwd=0.6)+
+  geom_hline(yintercept = -log10(0.05),lty=4,col="grey",lwd=0.6)+
+  theme(legend.position="right",
+        panel.grid=element_blank(),
+        legend.title = element_blank(),
+        legend.text= element_text(face="bold", color="black",family = "Times", size=16),
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(face="bold", color="black", size=16),
+        axis.text.y = element_text(face="bold", color="black", size=16),
+        axis.title.x = element_text(face="bold", color="black", size=16),
+        axis.title.y = element_text(face="bold",color="black", size=16))+
+  labs(x="shCLIC1 vs shScr / log2 (fold change) ",y="-log10 (p-value)",title="Volcano plot",size=16)
+dev.off()
 
-
-
+#Enrichment analysis.The results of enrichment analysis are shown in Figure 7. We take shCLIC1 vs shScr for example.
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(GSEABase)
+SYMBOL<-read.delim("significant_shCLIC1_vs_shScr.txt",header=TRUE)
+SYMBOLUP<-subset(SYMBOL,fc>2)
+SYMBOLDOWN<-subset(SYMBOL,fc<0.5)
+SYMBOLUP<-SYMBOLUP$geneNames
+SYMBOLDOWN<-SYMBOLDOWN$geneNames
+egUP<-bitr(SYMBOLUP,fromType="SYMBOL",toType="ENTREZID",OrgDb="org.Hs.eg.db")
+egDOWN<-bitr(SYMBOLDOWN,fromType="SYMBOL",toType="ENTREZID",OrgDb="org.Hs.eg.db")
+gmtfilekegg<-system.file("extdata","c2.cp.kegg.v6.2.symbols.gmt",package="clusterProfiler")
+KEGG<-read.gmt(gmtfilekegg)
+gmtfileGO<-system.file("extdata","c5.all.v6.2.symbols.gmt",package="clusterProfiler")
+GO<-read.gmt(gmtfileGO)
+egmtUPGO<-enricher(egUP$SYMBOL,TERM2GENE = GO)
+egmtDOWNGO<-enricher(egDOWN$SYMBOL,TERM2GENE = GO)
+egmtUPKEGG<-enricher(egUP$SYMBOL,TERM2GENE = GO)
+egmtDOWNKEGG<-enricher(egDOWN$SYMBOL,TERM2GENE = GO)
+write.table(egmtUPGO,"enrichment_GO_UP_shCLIC1.txt",col.names = TRUE,row.names = TRUE,quote=FALSE,sep="\t")
+write.table(egmtDOWNGO,"enrichment_GO_DOWN_shCLIC1.txt",col.names = TRUE,row.names = TRUE,quote=FALSE,sep="\t")
+write.table(egmtUPKEGG,"enrichment_KEGG_UP_shCLIC1.txt",col.names = TRUE,row.names = TRUE,quote=FALSE,sep="\t")
+write.table(egmtDOWNKEGG,"enrichment_KEGG_DOWN_shCLIC1.txt",col.names = TRUE,row.names = TRUE,quote=FALSE,sep="\t")
 
