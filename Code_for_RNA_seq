@@ -10,7 +10,7 @@ wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/data/grch38_tran.tar.gz
 #Download GRCh38 GTF file.
 wget ftp://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.gtf.gz
 #Data trimming of raw data.
-_-------RNAseq-trimming-option-1--------
+--------RNAseq-trimming-option-1.sh--------
 cd ~/CLIC1
 for a in *_R1.fastq.gz;
 do
@@ -19,7 +19,7 @@ bbduk.sh in=${a}_R1.fastq.gz in2=${a}_R2.fastq.gz out=${a}_R1.Clean.fq.gz out2=$
 done
 ---------------------------------
 #Data trimming of raw data for adapter.
----------RNAseq-trimming-option-2--------
+---------RNAseq-trimming-option-2.sh--------
 cd ~/CLIC1
 for a in *_R1.Clean.fq.gz;
 do
@@ -27,4 +27,33 @@ a=${a%_R1.Clean.fq.gz*};
 trim_galore ${a}_R1.Clean.fq.gz ${a}_R2.Clean.fq.gz --length 20 --stringency 5 --paired --fastqc;
 done
 -----------------------------------------
-#Hisat2 
+#Using HISAT2 to align the RNA sequecing reads.
+----------------HISAT2.sh-------------------
+cd ~/CLIC1
+for a in *_R1.Clean_val_1.fq.gz;
+do
+a=${a%_R1.Clean_val_1.fq.gz*};
+echo -------------;
+echo "${a} Hisat2 initiation";
+hisat2 -p 38 --dta -x ~/Reference_Genome/Hisat2_GRCh38/genome_tran -1 ${a}_R1.Clean_val_1.fq.gz -2 ${a}_R2.Clean_val_2.fq.gz -S ${a}.sam;
+samtools sort -@ 38 -o ${a}.bam ${a}.sam;
+rm ${a}.sam;
+echo "${a} Hisat2 done!";
+done
+-----------------------------------------
+#Use Stringtie to assembly RNA-Seq alignments into potential transcripts.
+----------------Stringtie.sh----------------
+cd ~/CLIC1
+for a in *.bam;
+do
+a=${a% in *.bam};
+echo -------------;
+echo "{a%} stringtie initiation";
+stringtie -p 38 -G ~/Refence_GTF/GTF_GRCh38/Homo_sapiens.GRCh38.90.gtf -o ./${a}.gtf -l ${a} ${a}.bam;
+echo "${a} stringtie done!";
+done
+--------------------------------------------
+#Use Stringtie to merge predicted transcripts from all libraries into a unified transcriptome.
+stringtie --merge -p 38 -G ~/Refence_GTF/GTF_GRCh38/Homo_sapiens.GRCh38.90.gtf -o ./merged_gtf/merged.gtf mergelist.txt
+#Use Stringtie to 
+
