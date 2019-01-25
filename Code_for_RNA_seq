@@ -1,0 +1,30 @@
+#The following procedure is under the environment of Anaconda.
+#Areate RNASEQ enviroment.
+conda create -n RNASEQ
+#Activate RNASEQ enviroment.
+source activate RNASEQ
+#Install associated softwares.
+conda install -c bioconda fastqc bbmap trim-galore hisat2 samtools stringtie
+#Download reference GRCh38 genome index of hisat2.
+wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/data/grch38_tran.tar.gz
+#Download GRCh38 GTF file.
+wget ftp://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.gtf.gz
+#Data trimming of raw data.
+_-------RNAseq-trimming-option-1--------
+cd ~/CLIC1
+for a in *_R1.fastq.gz;
+do
+a=${a%_R1.fastq.gz*};
+bbduk.sh in=${a}_R1.fastq.gz in2=${a}_R2.fastq.gz out=${a}_R1.Clean.fq.gz out2=${a}_R2.Clean.fq.gz ref=~/BBMAPref/resources/adapters.fa;
+done
+---------------------------------
+#Data trimming of raw data for adapter.
+---------RNAseq-trimming-option-2--------
+cd ~/CLIC1
+for a in *_R1.Clean.fq.gz;
+do
+a=${a%_R1.Clean.fq.gz*};
+trim_galore ${a}_R1.Clean.fq.gz ${a}_R2.Clean.fq.gz --length 20 --stringency 5 --paired --fastqc;
+done
+-----------------------------------------
+#Hisat2 
