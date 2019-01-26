@@ -1,0 +1,197 @@
+Gene	Group
+KCNA1	Potassium
+KCNA2	Potassium
+KCNA3	Potassium
+KCNA4	Potassium
+KCNA5	Potassium
+KCNA6	Potassium
+KCNA7	Potassium
+KCNA10	Potassium
+KCNAB1	Potassium
+KCNAB2	Potassium
+KCNAB3	Potassium
+KCNB1	Potassium
+KCNB2	Potassium
+KCNC1	Potassium
+KCNC2	Potassium
+KCNC3	Potassium
+KCNC4	Potassium
+KCND1	Potassium
+KCND2	Potassium
+KCND3	Potassium
+KCNE1	Potassium
+KCNE2	Potassium
+KCNE3	Potassium
+KCNE4	Potassium
+KCNE5	Potassium
+KCNF1	Potassium
+KCNG1	Potassium
+KCNG2	Potassium
+KCNG3	Potassium
+KCNG4	Potassium
+KCNH1	Potassium
+KCNH2	Potassium
+KCNH3	Potassium
+KCNH4	Potassium
+KCNH5	Potassium
+KCNH6	Potassium
+KCNH7	Potassium
+KCNH8	Potassium
+KCNJ1	Potassium
+KCNJ2	Potassium
+KCNJ3	Potassium
+KCNJ4	Potassium
+KCNJ5	Potassium
+KCNJ6	Potassium
+KCNJ8	Potassium
+KCNJ9	Potassium
+KCNJ10	Potassium
+KCNJ11	Potassium
+KCNJ12	Potassium
+KCNJ13	Potassium
+KCNJ14	Potassium
+KCNJ15	Potassium
+KCNJ16	Potassium
+KCNJ18	Potassium
+KCNK1	Potassium
+KCNK2	Potassium
+KCNK3	Potassium
+KCNK4	Potassium
+KCNK5	Potassium
+KCNK6	Potassium
+KCNK7	Potassium
+KCNK9	Potassium
+KCNK10	Potassium
+KCNK12	Potassium
+KCNK13	Potassium
+KCNK15	Potassium
+KCNK16	Potassium
+KCNK17	Potassium
+KCNK18	Potassium
+KCNMA1	Potassium
+KCNMB1	Potassium
+KCNMB2	Potassium
+KCNMB3	Potassium
+KCNMB3P1	Potassium
+KCNMB4	Potassium
+KCNN1	Potassium
+KCNN2	Potassium
+KCNN3	Potassium
+KCNN4	Potassium
+KCNQ1	Potassium
+KCNQ2	Potassium
+KCNQ3	Potassium
+KCNQ4	Potassium
+KCNQ5	Potassium
+KCNS1	Potassium
+KCNS2	Potassium
+KCNS3	Potassium
+KCNT1	Potassium
+KCNT2	Potassium
+KCNU1	Potassium
+KCNV1	Potassium
+KCNV2	Potassium
+CLCN1	chloride
+CLCN2	chloride
+CLCN3	chloride
+CLCN4	chloride
+CLCN5	chloride
+CLCN6	chloride
+CLCN7	chloride
+CLCNKA	chloride
+CLCNKB	chloride
+CFTR	chloride
+ANO1	chloride
+ANO2	chloride
+ANO3	chloride
+ANO4	chloride
+ANO5	chloride
+ANO6	chloride
+ANO7	chloride
+ANO8	chloride
+ANO9	chloride
+ANO10	chloride
+BEST1	chloride
+BEST2	chloride
+BEST3	chloride
+BEST4	chloride
+CLIC1	chloride
+CLIC2	chloride
+CLIC3	chloride
+CLIC4	chloride
+CLIC5	chloride
+CLIC6	chloride
+SCN1A	Sodium
+SCN1B	Sodium
+SCN2A	Sodium
+SCN2B	Sodium
+SCN3A	Sodium
+SCN3B	Sodium
+SCN4A	Sodium
+SCN4B	Sodium
+SCN5A	Sodium
+SCN7A	Sodium
+SCN8A	Sodium
+SCN9A	Sodium
+SCN10A	Sodium
+SCN11A	Sodium
+SCNN1A	Sodium
+SCNN1B	Sodium
+SCNN1D	Sodium
+SCNN1G	Sodium
+CACNA1A	Calcium
+CACNA1B	Calcium
+CACNA1C	Calcium
+CACNA1D	Calcium
+CACNA1E	Calcium
+CACNA1F	Calcium
+CACNA1G	Calcium
+CACNA1H	Calcium
+CACNA1I	Calcium
+CACNA1S	Calcium
+CACNA2D1	Calcium
+CACNA2D2	Calcium
+CACNA2D3	Calcium
+CACNA2D4	Calcium
+CACNB1	Calcium
+CACNB2	Calcium
+CACNB3	Calcium
+CACNB4	Calcium
+CACNG1	Calcium
+CACNG2	Calcium
+CACNG3	Calcium
+CACNG4	Calcium
+CACNG5	Calcium
+CACNG6	Calcium
+CACNG7	Calcium
+CACNG8	Calcium
+TRPA1	Transient Receptor Potential channels
+TRPC1	Transient Receptor Potential channels
+TRPC2	Transient Receptor Potential channels
+TRPC3	Transient Receptor Potential channels
+TRPC4	Transient Receptor Potential channels
+TRPC5	Transient Receptor Potential channels
+TRPC6	Transient Receptor Potential channels
+TRPC7	Transient Receptor Potential channels
+TRPM1	Transient Receptor Potential channels
+TRPM2	Transient Receptor Potential channels
+TRPM3	Transient Receptor Potential channels
+TRPM4	Transient Receptor Potential channels
+TRPM5	Transient Receptor Potential channels
+TRPM6	Transient Receptor Potential channels
+TRPM7	Transient Receptor Potential channels
+TRPM8	Transient Receptor Potential channels
+MCOLN1	Transient Receptor Potential channels
+MCOLN2	Transient Receptor Potential channels
+MCOLN3	Transient Receptor Potential channels
+PKD2	Transient Receptor Potential channels
+PKD2L1	Transient Receptor Potential channels
+PKD2L2	Transient Receptor Potential channels
+TRPV1	Transient Receptor Potential channels
+TRPV2	Transient Receptor Potential channels
+TRPV3	Transient Receptor Potential channels
+TRPV4	Transient Receptor Potential channels
+TRPV5	Transient Receptor Potential channels
+TRPV6	Transient Receptor Potential channels
+PIEZO1	Mechanic
+PIEZO2	Mechanic
