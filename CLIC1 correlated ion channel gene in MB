@@ -1,0 +1,39 @@
+###Identify CLIC1 significantly correlated ion channel genes in MB. Dataset of GSE85217 was processed for data analysis.###
+R
+data<-read.delim("GSE85217.txt",header=TRUE)
+library(psych)
+CLIC1_correlated_genes<-corr.test(data[3185],data[2:20197],adjust="fdr")
+r<-CLIC1_correlated_genes$r
+p<-CLIC1_correlated_genes$p
+CLIC1MBsta<-rbind(r,p)
+CLIC1MBsta<-t(CLIC1MBsta)
+colnames(CLIC1MBsta)<-c('rvalue','pvalue')
+write.table(CLIC1MBsta,"CLIC1MBsta.txt",col.names=TRUE,row.names=TRUE,quote=FALSE,sep="\t")
+CLIC1MBsta<-read.delim("CLIC1MBsta.txt",header=FALSE)
+CLIC1MBsta<-CLIC1MBsta[-1,]
+colnames(CLIC1MBsta)<-c('Gene','rvalue','pvalue')
+write.table(CLIC1MBsta,"CLIC1MBsta.txt",col.names=TRUE,row.names=TRUE,quote=FALSE,sep="\t")
+CLIC1MBsta<-read.delim("CLIC1MBsta.txt",header=TRUE)
+ionchannelgenelist<-read.delim("Index_for_ion_channel.txt",header=T)
+ionchannelgenesta<-merge(CLIC1MBsta,ionchannelgenelist,by="Gene",all=FALSE)
+ionchannelgenesig<-subset(ionchannelgenesta,pvalue < 0.05)
+ionchannelgenesig<-subset(ionchannelgenesig,rvalue > 0.3 | rvalue<(-0.3))
+write.table(ionchannelgenesig,"SigIon.txt",col.names=TRUE,row.names=TRUE,quote=FALSE,sep="\t")
+colnames(ionchannelgenesig)<-c('Sample','rvalue','pvalue')
+write.table(ionchannelgenesig,"ionchannelgenesig.txt",col.names=TRUE,row.names=TRUE,quote=FALSE,sep="\t")
+ionchannelgenesig<-read.delim("ionchannelgenesig.txt",header=TRUE)
+datat<-t(data)
+write.table(datat,"GSE85217t.txt",col.names=FALSE,row.names=TRUE,quote=FALSE,sep="\t")
+datat<-read.delim("GSE85217t.txt",header=TRUE)
+ionchannelgeneexp<-merge(ionchannelgenesig,datat,by="Sample",all=FALSE)
+ionchannelgeneexp<-ionchannelgeneexp[,-2:-4]
+write.table(ionchannelgeneexp,"ionchannelgeneexp.txt",col.names=TRUE,row.names=FALSE,quote=FALSE,sep="\t")
+ionchannelgeneexp<-read.delim("ionchannelgeneexp.txt",header=TRUE,row.names = "Sample")
+zscore<-t(scale(t(ionchannelgeneexp)))
+Cairo(file="heatmap_clic1_correlated_ion_channel_genes.png",type="png",units="in",bg="white",width=6,height=8,pointsize=16,dpi=300)
+pheatmap(zscore,scale="column",cluster_cols=T,color=colorRampPalette(c("Green","black","red"))(50))
+write.table(zscore,"zscore.txt",col.names=TRUE,row.names=TRUE,quote=FALSE,sep="\t")
+###Identify CLIC1 significantly correlated ion channel genes in MB. Dataset of GSE85217 was processed for data analysis.###
+###The zscore.txt file can be used for heatmap plotting. This file can be directly loaded to gitools for data visulaization.###
+###We also uploaded the .heatmap file of supplementary figure 7, which contained the zscores of genes, clinical information,### 
+###pearson's coefficiency and hierarchy levels. It can be loaded by gitools.###
