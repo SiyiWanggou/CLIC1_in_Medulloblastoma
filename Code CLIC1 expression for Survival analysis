@@ -41,4 +41,3 @@ plot(cut[[33]],"CLIC1",palette="npg")
 cat33<-cat[[33]]
 fit33<-survfit(Surv(OS_days,OS_event)~CLIC1,data=cat33)
 ggsurvplot(fit33,risk.table=TRUE,pval=TRUE,conf.int=FALSE,break.time.by=300,pval.method=TRUE,surv.median.line="hv",ggtheme=theme_survminer(),add.all = TRUE)
-###Generate the result of CLIC1 survival analysis one by one. We will get the figures that shown in supplementary figure 1.###
