@@ -35,5 +35,3 @@ pheatmap(zscore,scale="column",cluster_cols=T,color=colorRampPalette(c("Green","
 write.table(zscore,"zscore.txt",col.names=TRUE,row.names=TRUE,quote=FALSE,sep="\t")
 ###Identify CLIC1 significantly correlated ion channel genes in MB. Dataset of GSE85217 was processed for data analysis.###
 ###The zscore.txt file can be used for heatmap plotting. This file can be directly loaded to gitools for data visulaization.###
-###We also uploaded the .heatmap file of supplementary figure 7, which contained the zscores of genes, clinical information,### 
-###pearson's coefficiency and hierarchy levels. It can be loaded by gitools.###
