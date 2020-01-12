@@ -1,5 +1,5 @@
-The code listed below is associated with the manuscript from Xi Huang's lab, 
-Evolutionarily conserved co-dependency on chloride intracellular and potassium channels for mitosis and medulloblastoma growth.
-This manuscript majorly concerns on the role of CLIC1 in tumorgenesis of medulloblastoma.
+The code listed below is associated with the paper from Xi Huang's lab, 
+"Chloride intracellular channel 1 prevents cytoplasm dilution and cooperates with K channel to promote medulloblastoma growth".
+This manuscript majorly focus on the role of CLIC1 in tumorgenesis of medulloblastoma.
 In this repository, we provide the code of CLIC1 correlated ion channel genes determination, 
 survival analysis of TCGA PANCAN dataset and RNA-seq analysis in DAOY and ONS76 cell lines.
