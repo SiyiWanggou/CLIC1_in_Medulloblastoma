@@ -70,9 +70,8 @@ done
 --------------------------------------------
 
 #The results in *.gtf files were transformed into read counts by prepDE.py. PrepDE.py is introduced by Stringtie Manual.
-
-#We will get 15 folders containing qualified RNA-seq data of each library.
-#Then we move to R and identify the differential expressed genes between each two groups.
+#Data from DAOY and ONS76 cell lines were treated seperately.
+#Then we move to R and identify the differential expressed genes.
 
 
 
